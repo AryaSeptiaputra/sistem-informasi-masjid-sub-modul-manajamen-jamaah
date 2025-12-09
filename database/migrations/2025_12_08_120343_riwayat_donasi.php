@@ -12,12 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('riwayat_donasi', function (Blueprint $table) {
-            $table->foreignId('id_jamaah')->constrained('jamaah')->cascadeOnDelete();
-            $table->foreignId('id_donasi')->constrained('donasi')->cascadeOnDelete();
-            $table->decimal('besar_donasi', 12, 2);
-            $table->date('tanggal_donasi');
-            $table->primary(['id_jamaah','id_donasi','tanggal_donasi']);
-        });
+    $table->id('id_riwayat');
+    $table->unsignedBigInteger('id_jamaah');
+    $table->unsignedBigInteger('id_donasi');
+    $table->decimal('jumlah', 12, 2);
+    $table->date('tanggal_donasi')->nullable();
+    $table->timestamps();
+
+    $table->foreign('id_jamaah')
+          ->references('id_jamaah')
+          ->on('jamaah')
+          ->onDelete('cascade');
+
+    $table->foreign('id_donasi')
+          ->references('id_donasi')
+          ->on('donasi')
+          ->onDelete('cascade');
+});
+
 
     }
 

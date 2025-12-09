@@ -12,13 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kategori_jamaah', function (Blueprint $table) {
-            $table->foreignId('id_jamaah')->constrained('jamaah')->cascadeOnDelete();
-            $table->foreignId('id_kategori')->constrained('kategori')->cascadeOnDelete();
-            $table->boolean('status_aktif')->default(true);
-            $table->string('periode')->nullable();
+    $table->unsignedBigInteger('id_jamaah');
+    $table->unsignedBigInteger('id_kategori');
 
-            $table->primary(['id_jamaah','id_kategori']);
-        });
+    $table->boolean('status_aktif')->default(true);
+    $table->string('periode')->nullable();
+
+    $table->primary(['id_jamaah', 'id_kategori']);
+
+    $table->foreign('id_jamaah')
+          ->references('id_jamaah')
+          ->on('jamaah')
+          ->onDelete('cascade');
+
+    $table->foreign('id_kategori')
+          ->references('id_kategori')
+          ->on('kategori')
+          ->onDelete('cascade');
+    });
+
 
     }
 

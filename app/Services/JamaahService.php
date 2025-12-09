@@ -17,7 +17,7 @@ class JamaahService
 
     public function getById(int $id): ?Jamaah
     {
-        return Jamaah::find($id);
+        return Jamaah::where('id_jamaah', $id)->first();
     }
 
     public function create(array $data): Jamaah
@@ -44,13 +44,13 @@ class JamaahService
         $jamaah->delete();
     }
 
+
     /* =========================
      *  LOGIC RELASI JAMA'AH
      * ========================= */
 
     /**
-     * Sinkronkan kategori jamaah (pivot kategori_jamaah)
-     * $kategoriIds = [1,2,3]
+     * Sinkronisasi kategori jamaah.
      */
     public function syncKategori(Jamaah $jamaah, array $kategoriIds, ?string $periode = null): void
     {
@@ -66,7 +66,7 @@ class JamaahService
     }
 
     /**
-     * Daftarkan jamaah ke kegiatan tertentu
+     * Tambah jamaah ke kegiatan tertentu.
      */
     public function daftarKegiatan(Jamaah $jamaah, Kegiatan $kegiatan, ?string $tanggalDaftar = null): void
     {
@@ -77,7 +77,7 @@ class JamaahService
     }
 
     /**
-     * Update status kehadiran jamaah di suatu kegiatan
+     * Update status kehadiran.
      */
     public function updateKehadiran(Jamaah $jamaah, Kegiatan $kegiatan, string $status): void
     {
@@ -87,7 +87,7 @@ class JamaahService
     }
 
     /**
-     * Catat donasi yang dilakukan jamaah
+     * Catat donasi baru.
      */
     public function catatDonasi(
         Jamaah $jamaah,

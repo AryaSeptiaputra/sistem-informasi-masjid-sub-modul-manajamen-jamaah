@@ -10,9 +10,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
+    ->withMiddleware(function (Middleware $middleware) {
+
+        // REGISTER ALL MIDDLEWARE ALIASES HERE
+        $middleware->alias([
+            'auth.jamaah'  => \App\Http\Middleware\AuthJamaah::class,
+            'guest.jamaah' => \App\Http\Middleware\GuestJamaah::class,
+        ]);
+
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+    ->create();
