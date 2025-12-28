@@ -55,6 +55,12 @@
                     placeholder="Nomor Telepon (Opsional)">
             </div>
 
+            {{-- Status Aktif (default aktif) --}}
+            <input type="hidden" name="status_aktif" value="1">
+
+            {{-- Tanggal Bergabung (default hari ini, boleh dikosongkan di backend) --}}
+            <input type="hidden" name="tanggal_bergabung" value="{{ now()->toDateString() }}">
+
             {{-- Tanggal Lahir --}}
             <div>
                 <input id="tanggal_lahir" name="tanggal_lahir" type="date" 

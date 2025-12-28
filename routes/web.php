@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 // Import Model
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\RiwayatDonasi;
 use App\Models\Kegiatan;
 
@@ -40,7 +40,7 @@ Route::get('/login', function () {
 Route::post('/login', function (Request $request) {
     $request->validate(['username' => 'required', 'kata_sandi' => 'required']);
     
-    $user = Jamaah::where('username', $request->username)->first();
+    $user = User::where('username', $request->username)->first();
 
     if ($user && Hash::check($request->kata_sandi, $user->kata_sandi)) {
         if (!$user->status_aktif) return back()->withErrors(['username' => 'Akun nonaktif.']);
@@ -60,7 +60,7 @@ Route::get('/register', function () {
 // Proses Register
 Route::post('/register', function (Request $request) {
     $validated = $request->validate([
-        'username'      => 'required|unique:jamaah',
+        'username'      => 'required|unique:users',
         'nama_lengkap'  => 'required',
         'jenis_kelamin' => 'required',
         'kata_sandi'    => 'required|min:6|confirmed',
@@ -69,7 +69,7 @@ Route::post('/register', function (Request $request) {
         'tanggal_lahir' => 'nullable|date',
     ]);
 
-    $user = Jamaah::create($validated);
+    $user = User::create($validated);
     Auth::login($user);
 
     return redirect()->route('home');
@@ -111,7 +111,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     // Dashboard Admin
     Route::get('/dashboard', function () {
         $stats = [
-            'total_jamaah' => Jamaah::count(),
+            'total_jamaah' => User::count(),
             'total_donasi' => RiwayatDonasi::sum('besar_donasi'),
             'kegiatan_aktif' => Kegiatan::where('status_kegiatan', 'aktif')->count(),
         ];

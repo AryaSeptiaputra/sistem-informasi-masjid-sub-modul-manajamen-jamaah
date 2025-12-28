@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_donasi', function (Blueprint $table) {
             // PERBAIKAN:
-            $table->foreignId('id_jamaah')->constrained('jamaah', 'id_jamaah')->cascadeOnDelete();
+            $table->foreignId('id_jamaah')->constrained('users', 'id_jamaah')->cascadeOnDelete();
             $table->foreignId('id_donasi')->constrained('donasi', 'id_donasi')->cascadeOnDelete();
             
             $table->decimal('besar_donasi', 12, 2);

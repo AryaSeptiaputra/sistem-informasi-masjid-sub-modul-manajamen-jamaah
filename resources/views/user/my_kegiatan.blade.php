@@ -26,7 +26,7 @@
                     <option value="">Semua Status</option>
                     <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Akan Datang</option>
                     <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                    <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                    <option value="batal" {{ request('status') == 'batal' ? 'selected' : '' }}>Dibatalkan</option>
                 </select>
             </div>
 
@@ -67,8 +67,10 @@
                             </span>
                         @elseif($k->status_kegiatan == 'selesai')
                             <span class="text-gray-400 font-medium">Selesai</span>
-                        @else
+                        @elseif($k->status_kegiatan == 'batal')
                             <span class="text-red-400 font-medium">Dibatalkan</span>
+                        @else
+                            <span class="text-gray-400 font-medium">Status tidak dikenal</span>
                         @endif
                     </div>
                 </div>

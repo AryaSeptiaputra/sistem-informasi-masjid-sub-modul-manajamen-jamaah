@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('keikutsertaan_kegiatan', function (Blueprint $table) {
             // PERBAIKAN:
-            $table->foreignId('id_jamaah')->constrained('jamaah', 'id_jamaah')->cascadeOnDelete();
+            $table->foreignId('id_jamaah')->constrained('users', 'id_jamaah')->cascadeOnDelete();
             $table->foreignId('id_kegiatan')->constrained('kegiatan', 'id_kegiatan')->cascadeOnDelete();
             
             $table->date('tanggal_daftar')->nullable();

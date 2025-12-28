@@ -24,11 +24,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'username' => fake()->unique()->userName(),
+            'nama_lengkap' => fake()->name(),
+            'kata_sandi' => static::$password ??= Hash::make('password'),
+            'tanggal_lahir' => fake()->date(),
+            'jenis_kelamin' => fake()->randomElement(['L', 'P']),
+            'alamat' => fake()->address(),
+            'no_handphone' => fake()->phoneNumber(),
+            'tanggal_bergabung' => now()->toDateString(),
+            'status_aktif' => true,
         ];
     }
 
@@ -38,7 +42,7 @@ class UserFactory extends Factory
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            // Tidak digunakan pada skema jamaah; tetap dikembalikan untuk kompatibilitas
         ]);
     }
 }

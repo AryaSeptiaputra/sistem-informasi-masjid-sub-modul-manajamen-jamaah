@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Kegiatan;
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\KeikutsertaanKegiatan;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -42,7 +42,7 @@ class KegiatanService
 
     public function tambahPeserta(
         Kegiatan $kegiatan,
-        Jamaah $jamaah,
+        User $jamaah,
         ?string $tanggalDaftar = null
     ): void {
         // Cek duplikasi dulu biar tidak error SQL
@@ -62,7 +62,7 @@ class KegiatanService
 
     public function ubahStatusKehadiran(
         Kegiatan $kegiatan,
-        Jamaah $jamaah,
+        User $jamaah,
         string $status
     ): void {
         // Update langsung ke tabel pivot menggunakan Model Pivot

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 // Import Model
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\Kategori;
 use App\Models\Kegiatan;
 use App\Models\Donasi;
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         // ====================================================
         
         // A. Akun Admin Utama
-        $admin = Jamaah::create([
+        $admin = User::create([
             'username' => 'admin',
             'nama_lengkap' => 'Arya Eka Septiaputra',
             'kata_sandi' => 'password', 
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         // B. Buat 20 Jamaah Dummy
         for ($i = 1; $i <= 20; $i++) {
             $gender = $faker->randomElement(['L', 'P']);
-            $newUser = Jamaah::create([
+            $newUser = User::create([
                 'username' => 'user' . $i,
                 'nama_lengkap' => $faker->name($gender == 'L' ? 'male' : 'female'),
                 'kata_sandi' => 'password',

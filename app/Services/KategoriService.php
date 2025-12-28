@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Kategori;
-use App\Models\Jamaah;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class KategoriService
@@ -45,7 +45,7 @@ class KategoriService
     /**
      * Tambah jamaah ke kategori (tanpa menghapus kategori lain)
      */
-    public function tambahJamaah(Kategori $kategori, Jamaah $jamaah, ?string $periode = null): void
+    public function tambahJamaah(Kategori $kategori, User $jamaah, ?string $periode = null): void
     {
         $kategori->jamaah()->attach($jamaah->id_jamaah, [
             'status_aktif' => true,
@@ -56,7 +56,7 @@ class KategoriService
     /**
      * Nonaktifkan kategori untuk seorang jamaah
      */
-    public function nonAktifkanUntukJamaah(Kategori $kategori, Jamaah $jamaah): void
+    public function nonAktifkanUntukJamaah(Kategori $kategori, User $jamaah): void
     {
         $kategori->jamaah()->updateExistingPivot($jamaah->id_jamaah, [
             'status_aktif' => false,

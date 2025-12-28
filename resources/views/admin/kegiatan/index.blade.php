@@ -15,7 +15,8 @@
             nama: '',
             tgl: '',
             lok: '',
-            status: 'aktif'
+            status: 'aktif',
+            desc: ''
         },
 
         // Search & Filter
@@ -91,7 +92,7 @@
                         openModal = true;
                         editMode = false;
                         formAction = '{{ route('kegiatan.store') }}';
-                        formData = { nama:'', tgl:'', lok:'', status:'aktif' }
+                        formData = { nama:'', tgl:'', lok:'', status:'aktif', desc:'' }
                     "
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all flex items-center justify-center gap-2"
                 >
@@ -149,6 +150,9 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 {{ $k->lokasi ?? 'Lokasi belum diatur' }}
                             </div>
+                            <p class="text-xs text-gray-500 mt-2 line-clamp-2">
+                                {{ Str::limit($k->deskripsi ?? 'Belum ada deskripsi.', 100) }}
+                            </p>
                         </div>
                     </div>
 
@@ -168,7 +172,8 @@
                                         nama:'{{ $k->nama_kegiatan }}',
                                         tgl:'{{ $k->tanggal?->format('Y-m-d') }}',
                                         lok:'{{ $k->lokasi }}',
-                                        status:'{{ $k->status_kegiatan }}'
+                                        status:'{{ $k->status_kegiatan }}',
+                                        desc:'{{ $k->deskripsi }}'
                                     }
                                 "
                                 class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
@@ -351,6 +356,11 @@
                             <input type="text" name="lokasi" x-model="formData.lok" placeholder="Contoh: Masjid Utama"
                                 class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition text-gray-800 font-medium">
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Deskripsi</label>
+                        <textarea name="deskripsi" x-model="formData.desc" rows="4" placeholder="Tambahkan detail kegiatan..." class="w-full px-4 py-3.5 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition text-gray-800 font-medium resize-none"></textarea>
                     </div>
 
                 </form>

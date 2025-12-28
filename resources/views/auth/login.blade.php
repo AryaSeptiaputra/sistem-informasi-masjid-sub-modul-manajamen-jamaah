@@ -14,7 +14,7 @@
             <p class="mt-1 text-center text-sm text-gray-600">Masuk ke akun anda</p>
         </div>
 
-        <form class="mt-8 space-y-6" action="#" method="POST">
+        <form class="mt-8 space-y-6" action="{{ url('/login') }}" method="POST">
             @csrf
             <div class="rounded-md shadow-sm space-y-4">
                 <div class="relative">

@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Masjid</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: {
+                            50: '#eef3ff',
+                            100: '#d9e3ff',
+                            200: '#b6c6ff',
+                            300: '#93a9ff',
+                            400: '#6e88f3',
+                            500: '#4e73df',
+                            600: '#3f63c8',
+                            700: '#3451a6',
+                            800: '#2b4285',
+                            900: '#26386e',
+                        },
+                        primary: '#4e73df',
+                    },
+                },
+            },
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -11,7 +34,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div x-data="{ sidebarOpen: false, sidebarMinimized: false }" class="flex h-screen overflow-hidden">
+    <div x-data="{ sidebarOpen: false, sidebarMinimized: false }" class="flex min-h-screen overflow-hidden">
 
         <aside 
             :class="(sidebarOpen ? 'translate-x-0' : '-translate-x-full') + ' ' + (sidebarMinimized ? 'md:w-20' : 'md:w-64')"
@@ -133,6 +156,15 @@
 
         </aside>
 
+        {{-- Mobile overlay to close sidebar --}}
+        <div
+            x-show="sidebarOpen"
+            x-transition.opacity
+            class="fixed inset-0 bg-black/40 z-40 md:hidden"
+            @click="sidebarOpen = false"
+            aria-hidden="true"
+        ></div>
+
         <div class="flex-1 flex flex-col overflow-hidden">
             
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shadow-sm z-10">
@@ -158,7 +190,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 sm:p-6">
                 @yield('content')
             </main>
         </div>

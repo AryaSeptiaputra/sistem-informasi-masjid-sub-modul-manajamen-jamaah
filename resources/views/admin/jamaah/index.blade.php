@@ -19,6 +19,9 @@
             hp: '',
             alamat: '',
             jk: 'L',
+            tglLahir: '',
+            tglGabung: '',
+            status: '1',
             kategori_ids: []
         },
 
@@ -98,7 +101,7 @@
                         openJamaahModal = true;
                         editMode = false;
                         formAction = '{{ route('jamaah.store') }}';
-                        formDataJamaah = { nama:'', user:'', password:'', hp:'', alamat:'', jk:'L', kategori_ids: [] }
+                        formDataJamaah = { nama:'', username:'', password:'', hp:'', alamat:'', jk:'L', tglLahir:'', tglGabung:'', status:'1', kategori_ids: [] }
                     "
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all flex items-center justify-center gap-2"
                 >
@@ -167,6 +170,14 @@
                                         <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                         <span class="truncate max-w-[150px]">{{ $j->alamat ?? 'Alamat kosong' }}</span>
                                     </div>
+                                    <div class="flex items-center gap-2 text-[11px] text-gray-400">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        <span>Lahir: {{ $j->tanggal_lahir ? $j->tanggal_lahir->format('d M Y') : '-' }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-[11px] text-gray-400">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        <span>Bergabung: {{ $j->tanggal_bergabung ? $j->tanggal_bergabung->format('d M Y') : '-' }}</span>
+                                    </div>
                                 </div>
                             </td>
 
@@ -187,11 +198,14 @@
                                             formAction = '/jamaah/{{ $j->id_jamaah }}';
                                             formDataJamaah = {
                                                 nama:'{{ $j->nama_lengkap }}',
-                                                user:'{{ $j->username }}',
+                                                username:'{{ $j->username }}',
                                                 password: '', // Password dikosongkan saat edit
                                                 hp:'{{ $j->no_handphone }}',
                                                 alamat:'{{ $j->alamat }}',
                                                 jk:'{{ $j->jenis_kelamin }}',
+                                                tglLahir:'{{ $j->tanggal_lahir?->format('Y-m-d') }}',
+                                                tglGabung:'{{ $j->tanggal_bergabung?->format('Y-m-d') }}',
+                                                status: '{{ $j->status_aktif ? '1' : '0' }}',
                                                 kategori_ids: {{ $j->kategori->pluck('id_kategori') }}
                                             }
                                         "
@@ -352,7 +366,7 @@
                         <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Username</label>
                         <div class="relative mt-1">
                             <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-300"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg></span>
-                            <input type="text" name="username" x-model="formDataJamaah.user" required class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
+                            <input type="text" name="username" x-model="formDataJamaah.username" required class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
                         </div>
                     </div>
 
@@ -378,6 +392,24 @@
                         <select name="jenis_kelamin" x-model="formDataJamaah.jk" class="w-full mt-1 px-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Tanggal Lahir</label>
+                        <input type="date" name="tanggal_lahir" x-model="formDataJamaah.tglLahir" class="w-full mt-1 px-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Tanggal Bergabung</label>
+                        <input type="date" name="tanggal_bergabung" x-model="formDataJamaah.tglGabung" class="w-full mt-1 px-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Status Aktif</label>
+                        <select name="status_aktif" x-model="formDataJamaah.status" class="w-full mt-1 px-4 py-3 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition">
+                            <option value="1">Aktif</option>
+                            <option value="0">Non Aktif</option>
                         </select>
                     </div>
 

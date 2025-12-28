@@ -62,8 +62,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            // UBAH BARIS INI: Ganti User::class menjadi Jamaah::class
-            'model' => App\Models\Jamaah::class, 
+            'model' => App\Models\User::class,
         ],
     ],
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kategori_jamaah', function (Blueprint $table) {
             // PERBAIKAN: Tambahkan parameter kedua 'id_jamaah' dan 'id_kategori'
-            $table->foreignId('id_jamaah')->constrained('jamaah', 'id_jamaah')->cascadeOnDelete();
+            $table->foreignId('id_jamaah')->constrained('users', 'id_jamaah')->cascadeOnDelete();
             $table->foreignId('id_kategori')->constrained('kategori', 'id_kategori')->cascadeOnDelete();
             
             $table->boolean('status_aktif')->default(true);

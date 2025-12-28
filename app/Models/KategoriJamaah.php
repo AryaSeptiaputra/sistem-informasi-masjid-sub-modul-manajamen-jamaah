@@ -36,7 +36,7 @@ class KategoriJamaah extends Model
     // Relasi balik ke Jamaah
     public function jamaah()
     {
-        return $this->belongsTo(Jamaah::class, 'id_jamaah', 'id_jamaah');
+        return $this->belongsTo(User::class, 'id_jamaah', 'id_jamaah');
     }
 
     // Relasi balik ke Kategori

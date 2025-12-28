@@ -61,6 +61,27 @@
                 {{-- Form Fields --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 
+                    <div class="edit-mode hidden">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tanggal Lahir</label>
+                        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($user->tanggal_lahir)->format('Y-m-d')) }}" 
+                            class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm text-gray-800 font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tanggal Bergabung</label>
+                        <div class="w-full px-4 py-3 bg-gray-50 rounded-xl border border-transparent text-gray-700 font-semibold">
+                            {{ optional($user->tanggal_bergabung ?? $user->created_at)->format('d M Y') ?? '-' }}
+                        </div>
+                    </div>
+
+                    <div class="edit-mode hidden">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Status Aktif</label>
+                        <select name="status_aktif" class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm bg-white">
+                            <option value="1" {{ old('status_aktif', $user->status_aktif) ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ old('status_aktif', $user->status_aktif) ? '' : 'selected' }}>Non Aktif</option>
+                        </select>
+                    </div>
+
                     {{-- Field Nama Lengkap (Hanya muncul saat edit) --}}
                     <div class="edit-mode hidden md:col-span-2">
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nama Lengkap</label>

@@ -2,18 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Jamaah;
-use App\Models\Kegiatan;
-use App\Models\Donasi;
+use App\Models\User;
 use App\Models\RiwayatDonasi; // Pakai Model Transaksi langsung
 use App\Models\KeikutsertaanKegiatan; // Pakai Model Pivot langsung
-use Illuminate\Support\Facades\DB;
 
 class JamaahService
 {
     public function getAll(array $filters = [], int $perPage = 15)
     {
-        $query = Jamaah::query();
+        $query = User::query();
 
         if (!empty($filters['username'])) {
             $query->where('username', 'like', '%' . $filters['username'] . '%');
@@ -36,21 +33,21 @@ class JamaahService
         return $query->paginate($perPage);
     }
 
-    public function getById(int $id): Jamaah
+    public function getById(int $id): User
     {
-        return Jamaah::findOrFail($id);
+        return User::findOrFail($id);
     }
 
-    public function create(array $data): Jamaah
+    public function create(array $data): User
     {
         // FIX: Hapus Hash::make() karena Model Jamaah sudah cast 'kata_sandi' => 'hashed'
         // Data password raw akan otomatis di-hash oleh Eloquent
         
         $data['status_aktif'] = $data['status_aktif'] ?? true;
-        return Jamaah::create($data);
+        return User::create($data);
     }
 
-    public function update(Jamaah $jamaah, array $data): Jamaah
+    public function update(User $jamaah, array $data): User
     {
         // Jika password kosong, hapus dari array agar tidak menimpa password lama dengan null/kosong
         if (empty($data['kata_sandi'])) {
@@ -62,13 +59,13 @@ class JamaahService
         return $jamaah;
     }
 
-    public function delete(Jamaah $jamaah): bool
+    public function delete(User $jamaah): bool
     {
         $jamaah->update(['status_aktif' => false]);
         return true;
     }
 
-    public function syncKategori(Jamaah $jamaah, array $kategoriIds, ?string $periode = null)
+    public function syncKategori(User $jamaah, array $kategoriIds, ?string $periode = null)
     {
         $sync = [];
         foreach ($kategoriIds as $id) {
@@ -81,7 +78,7 @@ class JamaahService
     }
 
     // OPTIMASI: Gunakan Model Pivot KeikutsertaanKegiatan
-    public function daftarKegiatan(Jamaah $jamaah, int $idKegiatan, ?string $tanggalDaftar = null)
+    public function daftarKegiatan(User $jamaah, int $idKegiatan, ?string $tanggalDaftar = null)
     {
         // Cek apakah sudah terdaftar
         $exists = KeikutsertaanKegiatan::where('id_jamaah', $jamaah->id_jamaah)
@@ -101,7 +98,7 @@ class JamaahService
     }
 
     // OPTIMASI: Gunakan Model RiwayatDonasi langsung
-    public function catatDonasi(Jamaah $jamaah, int $idDonasi, float $jumlah, ?string $tanggal = null)
+    public function catatDonasi(User $jamaah, int $idDonasi, float $jumlah, ?string $tanggal = null)
     {
         // Menggunakan create langsung lebih aman untuk tabel transaksi
         return RiwayatDonasi::create([

@@ -10,6 +10,7 @@
         formData: {
             nama: '',
             tgl: '',
+            tglSelesai: '',
             desc: ''
         },
         searchProgram: '',
@@ -69,7 +70,7 @@
                 </div>
 
                 <button
-                    @click="openModal = true; editMode = false; formAction = '{{ route('donasi.store') }}'; formData = {nama: '', tgl: '', desc: ''}"
+                    @click="openModal = true; editMode = false; formAction = '{{ route('donasi.store') }}'; formData = {nama: '', tgl: '', tglSelesai: '', desc: ''}"
                     class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-200 hover:shadow-emerald-300 transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -95,24 +96,31 @@
                         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-100 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         </div>
-                        
-                        {{-- ACTIONS --}}
-                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                             <button
-                                @click="openModal = true; editMode = true; formAction = '/donasi/{{ $d->id_donasi }}'; formData = {nama:'{{ $d->nama_donasi }}', tgl:'{{ $d->tanggal_mulai?->format('Y-m-d') }}', desc:'{{ $d->deskripsi }}'}"
-                                class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                                title="Edit"
-                            >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                            </button>
 
-                            <form action="{{ route('donasi.destroy', $d->id_donasi) }}" method="POST"
-                                onsubmit="return confirm('Hapus program ini?')">
-                                @csrf @method('DELETE')
-                                <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border
+                                {{ ($d->tanggal_selesai && $d->tanggal_selesai->isPast()) ? 'bg-gray-50 text-gray-600 border-gray-200' : 'bg-blue-50 text-blue-700 border-blue-100' }}">
+                                {{ ($d->tanggal_selesai && $d->tanggal_selesai->isPast()) ? 'Selesai' : 'Berjalan' }}
+                            </span>
+
+                            {{-- ACTIONS --}}
+                            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                    @click="openModal = true; editMode = true; formAction = '/donasi/{{ $d->id_donasi }}'; formData = {nama:'{{ $d->nama_donasi }}', tgl:'{{ $d->tanggal_mulai?->format('Y-m-d') }}', tglSelesai:'{{ $d->tanggal_selesai?->format('Y-m-d') }}', desc:'{{ $d->deskripsi }}'}"
+                                    class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                                    title="Edit"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 </button>
-                            </form>
+
+                                <form action="{{ route('donasi.destroy', $d->id_donasi) }}" method="POST"
+                                    onsubmit="return confirm('Hapus program ini?')">
+                                    @csrf @method('DELETE')
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Hapus">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -125,10 +133,15 @@
                     </div>
 
                     {{-- FOOTER --}}
-                    <div class="pt-4 border-t border-gray-50 mt-2">
-                        <div class="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50/80 w-fit px-3 py-1.5 rounded-lg border border-emerald-100">
+                    <div class="pt-4 border-t border-gray-50 mt-2 grid grid-cols-1 gap-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50/80 w-fit px-3 py-1.5 rounded-lg border border-blue-100">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             <span>Mulai: {{ $d->tanggal_mulai ? $d->tanggal_mulai->format('d M Y') : '-' }}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-xs font-bold text-gray-600 bg-gray-100 w-fit px-3 py-1.5 rounded-lg border border-gray-200">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2h2m3-3h4m-4 0a1 1 0 001 1h2a1 1 0 001-1m-4 0a1 1 0 011-1h2a1 1 0 011 1m-6 7h6"/></svg>
+                            <span>Selesai: {{ $d->tanggal_selesai ? $d->tanggal_selesai->format('d M Y') : '—' }}</span>
                         </div>
                     </div>
                 </div>
@@ -302,14 +315,27 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Tanggal Mulai</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Tanggal Mulai</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                                <input type="date" name="tanggal_mulai" x-model="formData.tgl"
+                                    class="w-full pl-11 pr-4 py-3.5 rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition text-gray-800 font-medium">
                             </div>
-                            <input type="date" name="tanggal_mulai" x-model="formData.tgl"
-                                class="w-full pl-11 pr-4 py-3.5 rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition text-gray-800 font-medium">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Tanggal Selesai</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                                <input type="date" name="tanggal_selesai" x-model="formData.tglSelesai"
+                                    class="w-full pl-11 pr-4 py-3.5 rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition text-gray-800 font-medium">
+                            </div>
                         </div>
                     </div>
 

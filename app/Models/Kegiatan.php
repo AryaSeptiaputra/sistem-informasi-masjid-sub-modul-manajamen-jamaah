@@ -30,7 +30,7 @@ class Kegiatan extends Model
 
     public function jamaah()
     {
-        return $this->belongsToMany(Jamaah::class, 'keikutsertaan_kegiatan', 'id_kegiatan', 'id_jamaah')
+        return $this->belongsToMany(User::class, 'keikutsertaan_kegiatan', 'id_kegiatan', 'id_jamaah')
                     ->withPivot(['tanggal_daftar', 'status_kehadiran']);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\Kategori; // Jangan lupa import ini
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class JamaahController extends Controller
@@ -13,7 +12,7 @@ class JamaahController extends Controller
     public function index(Request $request)
     {
         // 1. Data untuk Tab Jamaah (TAMPIL SEMUA)
-        $query = Jamaah::with('kategori');
+        $query = User::with('kategori');
 
         if ($request->has('q')) {
             $query->where(function ($q) use ($request) {
@@ -41,16 +40,19 @@ class JamaahController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'username'      => 'required|unique:jamaah,username',
+            'username'      => 'required|unique:users,username',
             'nama_lengkap'  => 'required',
             'kata_sandi'    => 'required|min:6',
             'jenis_kelamin' => 'required|in:L,P',
+            'tanggal_lahir' => 'nullable|date',
+            'tanggal_bergabung' => 'nullable|date',
+            'status_aktif'  => 'required|boolean',
             'no_handphone'  => 'nullable',
             'alamat'        => 'nullable',
             'kategori_ids'  => 'nullable|array' // Validasi input array kategori
         ]);
 
-        $user = Jamaah::create($validated);
+        $user = User::create($validated);
 
         // Simpan relasi kategori (Pivot)
         // Default status_aktif di pivot = true, periode = tahun ini
@@ -66,14 +68,17 @@ class JamaahController extends Controller
 
     public function update(Request $request, $id)
     {
-        $jamaah = Jamaah::findOrFail($id);
+        $jamaah = User::findOrFail($id);
 
         $validated = $request->validate([
-            'username'     => ['required', Rule::unique('jamaah')->ignore($id, 'id_jamaah')],
+            'username'     => ['required', Rule::unique('users')->ignore($id, 'id_jamaah')],
             'nama_lengkap' => 'required',
             'no_handphone' => 'nullable',
             'alamat'       => 'nullable',
             'kata_sandi'   => 'nullable|min:6',
+            'tanggal_lahir' => 'nullable|date',
+            'tanggal_bergabung' => 'nullable|date',
+            'status_aktif' => 'required|boolean',
             'kategori_ids' => 'nullable|array'
         ]);
 
@@ -99,7 +104,7 @@ class JamaahController extends Controller
 
     public function destroy($id)
     {
-        $jamaah = Jamaah::findOrFail($id);
+        $jamaah = User::findOrFail($id);
         $jamaah->kategori()->detach(); // Hapus relasi dulu
         $jamaah->delete();
         

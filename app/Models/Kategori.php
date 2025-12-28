@@ -19,7 +19,7 @@ class Kategori extends Model
 
     public function jamaah()
     {
-        return $this->belongsToMany(Jamaah::class, 'kategori_jamaah', 'id_kategori', 'id_jamaah')
+        return $this->belongsToMany(User::class, 'kategori_jamaah', 'id_kategori', 'id_jamaah')
                     ->withPivot(['status_aktif', 'periode']);
     }
 }

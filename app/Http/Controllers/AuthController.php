@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jamaah;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,8 +15,8 @@ class AuthController extends Controller
             'kata_sandi' => 'required|string'
         ]);
 
-        // Cari jamaah berdasarkan username
-        $user = Jamaah::where('username', $validated['username'])->first();
+        // Cari user berdasarkan username
+        $user = User::where('username', $validated['username'])->first();
 
         // 1. Cek User ada?
         // 2. Cek Password hash match?

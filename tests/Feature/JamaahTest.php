@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\Kategori;
 use App\Models\Kegiatan;
 use App\Models\Donasi;
@@ -35,9 +35,9 @@ class JamaahTest extends TestCase
     /** @test */
     public function can_list_jamaah_with_pagination()
     {
-        Jamaah::factory()->count(5)->create();
+        User::factory()->count(5)->create();
 
-        $user = Jamaah::factory()->create();
+        $user = User::factory()->create();
         $token = $user->createToken('test')->plainTextToken;
 
         $res = $this->getJson('/api/jamaah?per_page=2', [
@@ -59,7 +59,7 @@ class JamaahTest extends TestCase
     /** @test */
     public function can_sync_kategori_for_jamaah()
     {
-        $jamaah = Jamaah::factory()->create();
+        $jamaah = User::factory()->create();
         $kategori = Kategori::factory()->create();
 
         $token = $jamaah->createToken('test')->plainTextToken;
@@ -83,7 +83,7 @@ class JamaahTest extends TestCase
     /** @test */
     public function can_daftar_kegiatan()
     {
-        $jamaah = Jamaah::factory()->create();
+        $jamaah = User::factory()->create();
         $kegiatan = Kegiatan::factory()->create();
 
         $token = $jamaah->createToken('test')->plainTextToken;
@@ -105,7 +105,7 @@ class JamaahTest extends TestCase
     /** @test */
     public function can_catat_donasi()
     {
-        $jamaah = Jamaah::factory()->create();
+        $jamaah = User::factory()->create();
         $donasi = Donasi::factory()->create();
 
         $token = $jamaah->createToken('test')->plainTextToken;

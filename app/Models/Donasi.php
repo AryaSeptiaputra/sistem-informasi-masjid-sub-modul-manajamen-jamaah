@@ -30,7 +30,7 @@ class Donasi extends Model
 
     public function donatur()
     {
-        return $this->belongsToMany(Jamaah::class, 'riwayat_donasi', 'id_donasi', 'id_jamaah')
+        return $this->belongsToMany(User::class, 'riwayat_donasi', 'id_donasi', 'id_jamaah')
                     ->withPivot(['besar_donasi', 'tanggal_donasi']);
     }
 

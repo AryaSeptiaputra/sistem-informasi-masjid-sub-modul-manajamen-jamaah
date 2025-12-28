@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Donasi;
-use App\Models\Jamaah;
+use App\Models\User;
 use App\Models\RiwayatDonasi;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -43,7 +43,7 @@ class DonasiService
 
     public function catatDonasi(
         Donasi $donasi,
-        Jamaah $jamaah,
+        User $jamaah,
         float $jumlah,
         ?string $tanggal = null
     ): void {

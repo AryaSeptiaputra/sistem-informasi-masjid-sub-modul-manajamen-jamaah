@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash; // Tambahan untuk hashing password
 
 class HomeController extends Controller
 {
@@ -39,6 +38,8 @@ class HomeController extends Controller
             'no_handphone'  => 'nullable|string|max:20',
             'jenis_kelamin' => 'required|in:L,P',
             'alamat'        => 'nullable|string|max:500',
+            'tanggal_lahir' => 'nullable|date',
+            'status_aktif'  => 'required|boolean',
             // Validasi password: opsional, min 8 karakter, harus sama dengan konfirmasi
             'password'      => 'nullable|string|min:8|confirmed',
         ]);
@@ -49,11 +50,14 @@ class HomeController extends Controller
             'no_handphone'  => $validated['no_handphone'],
             'jenis_kelamin' => $validated['jenis_kelamin'],
             'alamat'        => $validated['alamat'],
+            'tanggal_lahir' => $validated['tanggal_lahir'],
+            'status_aktif'  => $validated['status_aktif'],
         ];
 
         // Cek jika user mengisi password baru
         if ($request->filled('password')) {
-            $dataToUpdate['password'] = Hash::make($request->password);
+            // Kolom di DB: kata_sandi (model Jamaah casting hashed)
+            $dataToUpdate['kata_sandi'] = $request->password;
         }
 
         // Lakukan update ke database
