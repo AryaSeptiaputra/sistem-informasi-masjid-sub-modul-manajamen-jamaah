@@ -3,104 +3,171 @@
 @section('title', 'Kegiatan Saya')
 
 @section('content')
-<div class="space-y-6">
-
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <p class="text-gray-500">Daftar kegiatan yang Anda ikuti atau hadiri.</p>
-        <span class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold w-fit">{{ $kegiatan->count() }} Kegiatan Ditampilkan</span>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="mb-4">
+        <h1 class="h3 fw-bold text-dark">Kegiatan Saya</h1>
+        <p class="text-muted mb-0">Kelola dan pantau semua kegiatan yang Anda ikuti</p>
     </div>
 
-    <div class="bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">
-        <form action="{{ route('user.kegiatan') }}" method="GET" class="flex flex-col md:flex-row gap-4">
-            
-            <div class="flex-1 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <!-- Stat Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <p class="text-white-50 text-uppercase fw-semibold small mb-2">Total Kegiatan</p>
+                            <h3 class="fw-bold mb-0">{{ $kegiatan->count() }}</h3>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 0.75rem; background-color: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-calendar text-white fa-lg"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-75 small mb-0">Kegiatan yang Anda ikuti</p>
                 </div>
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama kegiatan atau lokasi..." 
-                    class="pl-10 w-full rounded-xl border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition text-sm py-2.5">
             </div>
+        </div>
 
-            <div class="w-full md:w-48">
-                <select name="status" class="w-full rounded-xl border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 transition text-sm text-gray-600 py-2.5">
-                    <option value="">Semua Status</option>
-                    <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Akan Datang</option>
-                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                    <option value="batal" {{ request('status') == 'batal' ? 'selected' : '' }}>Dibatalkan</option>
-                </select>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <p class="text-white-50 text-uppercase fw-semibold small mb-2">Akan Datang</p>
+                            <h3 class="fw-bold mb-0">{{ $kegiatan->where('status_kegiatan', 'aktif')->count() }}</h3>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 0.75rem; background-color: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clock text-white fa-lg"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-75 small mb-0">Kegiatan mendatang</p>
+                </div>
             </div>
+        </div>
 
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition shadow-md flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                Filter
-            </button>
-            
-            @if(request()->has('q') || request()->has('status'))
-            <a href="{{ route('user.kegiatan') }}" class="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2.5 rounded-xl text-sm font-bold transition">
-                Reset
-            </a>
-            @endif
-        </form>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <p class="text-white-50 text-uppercase fw-semibold small mb-2">Kehadiran</p>
+                            <h3 class="fw-bold mb-0">{{ $kegiatan->where('pivot.status_kehadiran', 'hadir')->count() }}</h3>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 0.75rem; background-color: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-check-circle text-white fa-lg"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-75 small mb-0">Kegiatan yang dihadiri</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="space-y-4">
-        @forelse($kegiatan as $k)
-        <div class="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            
-            <div class="flex items-center gap-5">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex flex-col items-center justify-center border border-blue-100 flex-shrink-0">
-                    <span class="text-[10px] font-bold uppercase tracking-wider">{{ \Carbon\Carbon::parse($k->tanggal)->format('M') }}</span>
-                    <span class="text-2xl font-bold">{{ \Carbon\Carbon::parse($k->tanggal)->format('d') }}</span>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-lg text-gray-900">{{ $k->nama_kegiatan }}</h4>
-                    <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            {{ $k->lokasi ?? 'Masjid Utama' }}
-                        </span>
-                        
-                        @if($k->status_kegiatan == 'aktif')
-                            <span class="text-emerald-600 font-medium flex items-center gap-1">
-                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Akan Datang
-                            </span>
-                        @elseif($k->status_kegiatan == 'selesai')
-                            <span class="text-gray-400 font-medium">Selesai</span>
-                        @elseif($k->status_kegiatan == 'batal')
-                            <span class="text-red-400 font-medium">Dibatalkan</span>
-                        @else
-                            <span class="text-gray-400 font-medium">Status tidak dikenal</span>
-                        @endif
+    <!-- Filter Toolbar -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <form action="{{ route('user.kegiatan') }}" method="GET">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body d-flex flex-column flex-xl-row gap-3 align-items-xl-center justify-content-between toolbar-control">
+                        <div>
+                            <h3 class="h5 mb-1">Daftar Kegiatan</h3>
+                            <small class="text-muted">Total {{ $kegiatan->count() }} kegiatan yang Anda ikuti.</small>
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row gap-3 w-100 w-xl-auto">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari kegiatan atau lokasi...">
+                            </div>
+                            <select name="status" class="form-select">
+                                <option value="">Semua Status</option>
+                                <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Akan Datang</option>
+                                <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="batal" {{ request('status') == 'batal' ? 'selected' : '' }}>Dibatalkan</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-filter me-1"></i> Filter
+                            </button>
+                            @if(request()->has('q') || request()->has('status'))
+                                <a href="{{ route('user.kegiatan') }}" class="btn btn-outline-secondary">Reset</a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="flex-shrink-0 border-t sm:border-t-0 sm:border-l border-gray-100 pt-3 sm:pt-0 sm:pl-5">
-                <span class="block text-xs text-gray-400 font-bold uppercase mb-1">Status Kehadiran</span>
-                @if($k->pivot->status_kehadiran == 'hadir')
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
-                        ✅ Hadir
-                    </span>
-                @elseif($k->pivot->status_kehadiran == 'izin')
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">
-                        📩 Izin
-                    </span>
-                @else
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-500">
-                        ⏳ Belum Hadir
-                    </span>
-                @endif
-            </div>
-
+            </form>
         </div>
-        @empty
-        <div class="text-center py-12 bg-white rounded-3xl border border-gray-100 border-dashed">
-            <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <p class="text-gray-500 font-medium">Tidak ada kegiatan yang ditemukan.</p>
-            <p class="text-sm text-gray-400">Coba ubah kata kunci atau status filter Anda.</p>
-        </div>
-        @endforelse
     </div>
+
+    <!-- Activity List -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Daftar Kegiatan Saya</h5>
+                <span class="badge bg-secondary-subtle text-secondary fw-semibold">{{ $kegiatan->count() }} Kegiatan</span>
+            </div>
+
+            @forelse($kegiatan as $k)
+                @if($loop->first)
+                <div class="row g-4" style="row-gap: 2.5rem;">
+                @endif
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100" style="overflow: hidden;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div style="width: 48px; height: 48px; border-radius: 0.75rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-calendar text-white"></i>
+                                    </div>
+                                    @if($k->status_kegiatan == 'aktif')
+                                        <span class="badge bg-success-subtle text-success fw-semibold small">Akan Datang</span>
+                                    @elseif($k->status_kegiatan == 'selesai')
+                                        <span class="badge bg-secondary-subtle text-secondary fw-semibold small">Selesai</span>
+                                    @elseif($k->status_kegiatan == 'batal')
+                                        <span class="badge bg-danger-subtle text-danger fw-semibold small">Dibatalkan</span>
+                                    @endif
+                                </div>
+                                <h6 class="fw-bold text-dark mb-2">{{ $k->nama_kegiatan }}</h6>
+                                <p class="text-muted small mb-3">{{ Str::limit($k->deskripsi ?? '', 60) }}</p>
+                                
+                                <div class="d-flex flex-column gap-2 mb-3">
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="fas fa-calendar-alt text-primary me-2" style="width: 16px;"></i>
+                                        <span>{{ \Carbon\Carbon::parse($k->tanggal)->translatedFormat('d F Y') }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="fas fa-map-marker-alt text-primary me-2" style="width: 16px;"></i>
+                                        <span>{{ $k->lokasi ?? 'Masjid Utama' }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                    <span class="text-muted small">Kehadiran</span>
+                                    @if($k->pivot->status_kehadiran == 'hadir')
+                                        <span class="badge bg-success-subtle text-success fw-semibold small">Hadir</span>
+                                    @elseif($k->pivot->status_kehadiran == 'izin')
+                                        <span class="badge bg-warning-subtle text-warning fw-semibold small">Izin</span>
+                                    @else
+                                        <span class="badge bg-secondary-subtle text-secondary fw-semibold small">Belum Hadir</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @if($loop->last)
+                </div>
+                @endif
+            @empty
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body py-5">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <i class="fas fa-calendar-times fa-3x text-muted mb-3 opacity-50"></i>
+                                <h6 class="text-muted fw-semibold mb-1">Tidak ada kegiatan</h6>
+                                <p class="text-muted small mb-0">Belum ada kegiatan yang sesuai dengan filter Anda.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforelse
+        </div>
 </div>
 @endsection

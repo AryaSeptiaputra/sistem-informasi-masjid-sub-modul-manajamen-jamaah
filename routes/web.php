@@ -75,11 +75,11 @@ Route::post('/register', function (Request $request) {
     return redirect()->route('home');
 });
 
-// Logout
-Route::get('/logout', function () {
+// Logout (POST)
+Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');
-});
+})->name('logout');
 
 
 // ====================================================

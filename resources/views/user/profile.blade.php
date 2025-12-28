@@ -3,185 +3,196 @@
 @section('title', 'Profil Saya')
 
 @section('content')
-<div class="max-w-4xl mx-auto pb-10">
-    
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Profil Saya</h1>
+            <p class="text-muted mb-0">Kelola informasi akun Anda</p>
+        </div>
+        <button type="button" id="edit-trigger" onclick="toggleEditMode()" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i> Edit Profil
+        </button>
+    </div>
+
     <form action="{{ route('profile.update') }}" method="POST">
         @csrf
         @method('PUT')
 
-        <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden relative">
-            
-            {{-- Header Profil --}}
-            <div class="h-40 bg-gradient-to-r from-blue-600 to-indigo-700 relative">
-                
-                <div id="edit-trigger" class="absolute top-6 right-6">
-                    <button type="button" onclick="toggleEditMode()" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-2 shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        Edit Profil
-                    </button>
-                </div>
-
-                <div class="absolute -bottom-14 left-8 sm:left-12">
-                    <div class="w-28 h-28 bg-white rounded-full p-1.5 shadow-lg">
-                        <div class="w-full h-full bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
-                            @if($user->jenis_kelamin == 'L')
-                                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                            @else
-                                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                            @endif
+        <!-- Profile Banner Card -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="position-relative" style="height: 180px; background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);">
+                <div class="position-absolute" style="bottom: -60px; left: 32px;">
+                    <div class="bg-white rounded-circle p-3 shadow" style="width: 120px; height: 120px;">
+                        <div class="w-100 h-100 rounded-circle d-flex align-items-center justify-content-center text-white" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                            <i class="fas {{ $user->jenis_kelamin == 'L' ? 'fa-user' : 'fa-user' }} fa-3x"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-20 px-8 sm:px-12 pb-10">
-                
-                {{-- Nama & Kategori --}}
-                <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
-                    <div class="w-full">
-                        <h2 class="text-3xl font-bold text-gray-800">{{ $user->nama_lengkap }}</h2>
-                        <p class="text-gray-500 font-medium text-lg mt-1">@ {{ $user->username }}</p>
-                    </div>
-                    
-                    <div class="flex flex-wrap gap-2 justify-start md:justify-end mt-2 md:mt-0">
-                        @forelse($user->kategori as $kat)
-                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wide">
-                                {{ $kat->nama_kategori }}
-                            </span>
-                        @empty
-                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-50 text-gray-500 border border-gray-200">
-                                Jamaah Umum
-                            </span>
-                        @endforelse
-                    </div>
-                </div>
-
-                <hr class="border-gray-100 mb-8">
-
-                {{-- Form Fields --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-
-                    <div class="edit-mode hidden">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($user->tanggal_lahir)->format('Y-m-d')) }}" 
-                            class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm text-gray-800 font-medium">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tanggal Bergabung</label>
-                        <div class="w-full px-4 py-3 bg-gray-50 rounded-xl border border-transparent text-gray-700 font-semibold">
-                            {{ optional($user->tanggal_bergabung ?? $user->created_at)->format('d M Y') ?? '-' }}
+            <div class="card-body pt-5 mt-4">
+                <div class="row align-items-start mb-4">
+                    <div class="col-md-8">
+                        <h2 class="h3 fw-bold mb-2">{{ $user->nama_lengkap }}</h2>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-at me-2"></i> {{ $user->username }}
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            @forelse($user->kategori as $kat)
+                                <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2">
+                                    <i class="fas fa-tag me-1"></i> {{ $kat->nama_kategori }}
+                                </span>
+                            @empty
+                                <span class="badge bg-secondary-subtle text-secondary fw-semibold px-3 py-2">
+                                    <i class="fas fa-user me-1"></i> Jamaah Umum
+                                </span>
+                            @endforelse
+                            @if($user->status_aktif)
+                                <span class="badge bg-success-subtle text-success fw-semibold px-3 py-2">
+                                    <i class="fas fa-check-circle me-1"></i> Aktif
+                                </span>
+                            @else
+                                <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-2">
+                                    <i class="fas fa-times-circle me-1"></i> Non Aktif
+                                </span>
+                            @endif
                         </div>
                     </div>
-
-                    <div class="edit-mode hidden">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Status Aktif</label>
-                        <select name="status_aktif" class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm bg-white">
-                            <option value="1" {{ old('status_aktif', $user->status_aktif) ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ old('status_aktif', $user->status_aktif) ? '' : 'selected' }}>Non Aktif</option>
-                        </select>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="text-muted small">
+                            <i class="far fa-calendar-alt me-2"></i> Bergabung sejak
+                            <div class="fw-bold text-dark mt-1">{{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->translatedFormat('d F Y') : '-' }}</div>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    {{-- Field Nama Lengkap (Hanya muncul saat edit) --}}
-                    <div class="edit-mode hidden md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $user->nama_lengkap) }}" 
-                            class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm text-gray-800 font-medium">
+        <!-- Personal Information -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="fas fa-user-circle text-primary me-2"></i> Informasi Personal
+                        </h5>
                     </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Nama Lengkap</label>
+                            <div class="view-mode form-control bg-light border-0">{{ $user->nama_lengkap }}</div>
+                            <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $user->nama_lengkap) }}" class="edit-mode d-none form-control" placeholder="Masukkan nama lengkap">
+                        </div>
 
-                    {{-- PASSWORD SECTION (DIMODIFIKASI) --}}
-                    {{-- Class 'edit-mode hidden' ditambahkan di wrapper utama agar default tersembunyi --}}
-                    <div class="edit-mode hidden md:col-span-2 border-t border-b border-gray-100 py-6 my-2">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                            Password Baru <span class="text-blue-500 normal-case ml-1 font-normal">(Kosongkan jika tidak ingin mengubah)</span>
-                        </label>
-                        
-                        {{-- Bagian 'view-mode' telah dihapus agar tidak ada tampilan 'Terkunci' --}}
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
-                            <div class="relative">
-                                <input type="password" name="password" id="password" placeholder="Password Baru" autocomplete="new-password"
-                                    class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm placeholder-gray-400">
-                                
-                                <button type="button" onclick="togglePassword('password', 'eye-pass')" 
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition p-1">
-                                    <svg id="eye-pass-hide" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
-                                    <svg id="eye-pass-show" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                </button>
+                        <div class="mb-4">
+                            <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Jenis Kelamin</label>
+                            <div class="view-mode form-control bg-light border-0">
+                                <i class="fas {{ $user->jenis_kelamin == 'L' ? 'fa-mars text-primary' : 'fa-venus text-danger' }} me-2"></i>
+                                {{ $user->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
                             </div>
+                            <select name="jenis_kelamin" class="edit-mode d-none form-control">
+                                <option value="L" {{ $user->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="P" {{ $user->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                        </div>
 
-                            <div class="relative">
-                                <input type="password" name="password_confirmation" id="password_confirm" placeholder="Ulangi Password Baru" autocomplete="new-password"
-                                    class="w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm placeholder-gray-400">
-                                
-                                <button type="button" onclick="togglePassword('password_confirm', 'eye-conf')" 
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 transition p-1">
-                                    <svg id="eye-conf-hide" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
-                                    <svg id="eye-conf-show" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                </button>
+                        <div class="mb-0">
+                            <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Tanggal Lahir</label>
+                            <div class="view-mode form-control bg-light border-0">
+                                <i class="far fa-calendar-alt text-primary me-2"></i> {{ optional($user->tanggal_lahir)->format('d F Y') ?? 'Belum diisi' }}
                             </div>
-
+                            <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', optional($user->tanggal_lahir)->format('Y-m-d')) }}" class="edit-mode d-none form-control">
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {{-- Nomor Handphone --}}
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Nomor Handphone</label>
-                        
-                        <div class="view-mode w-full px-4 py-3 bg-gray-50 rounded-xl border border-transparent text-gray-700 font-semibold">
-                            {{ $user->no_handphone ?? '-' }}
-                        </div>
-                        
-                        <input type="text" name="no_handphone" value="{{ old('no_handphone', $user->no_handphone) }}" 
-                            class="edit-mode hidden w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="fas fa-address-book text-success me-2"></i> Informasi Kontak
+                        </h5>
                     </div>
-
-                    {{-- Jenis Kelamin --}}
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Jenis Kelamin</label>
-                        
-                        <div class="view-mode w-full px-4 py-3 bg-gray-50 rounded-xl border border-transparent text-gray-700 font-semibold">
-                            {{ $user->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Nomor Handphone</label>
+                            <div class="view-mode form-control bg-light border-0">
+                                <i class="fas fa-phone text-primary me-2"></i> {{ $user->no_handphone ?? 'Belum diisi' }}
+                            </div>
+                            <input type="text" name="no_handphone" value="{{ old('no_handphone', $user->no_handphone) }}" class="edit-mode d-none form-control" placeholder="Contoh: 081234567890">
                         </div>
-                        
-                        <select name="jenis_kelamin" class="edit-mode hidden w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm bg-white">
-                            <option value="L" {{ $user->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="P" {{ $user->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
-                        </select>
-                    </div>
 
-                    {{-- Alamat --}}
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Alamat Lengkap</label>
-                        
-                        <div class="view-mode w-full px-4 py-3 bg-gray-50 rounded-xl border border-transparent text-gray-700 font-medium leading-relaxed min-h-[5rem]">
-                            {{ $user->alamat ?? 'Alamat belum diisi' }}
-                        </div>
-                        
-                        <textarea name="alamat" rows="3" 
-                            class="edit-mode hidden w-full px-4 py-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition shadow-sm">{{ old('alamat', $user->alamat) }}</textarea>
-                    </div>
-
-                    <div class="md:col-span-2 mt-2">
-                        <div class="flex items-center gap-2 text-sm text-gray-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            <span>Bergabung sejak {{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->translatedFormat('d F Y') : '-' }}</span>
+                        <div class="mb-0">
+                            <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Alamat Lengkap</label>
+                            <div class="view-mode form-control bg-light border-0 d-flex align-items-flex-start gap-2" style="min-height: 120px;">
+                                <i class="fas fa-map-marker-alt text-primary" style="flex-shrink: 0; margin-top: 0.25rem;"></i>
+                                <span>{{ $user->alamat ?? 'Alamat belum diisi' }}</span>
+                            </div>
+                            <textarea name="alamat" rows="5" class="edit-mode d-none form-control" placeholder="Masukkan alamat lengkap Anda">{{ old('alamat', $user->alamat) }}</textarea>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Security Settings -->
+        <div class="card border-0 shadow-sm mb-4 edit-mode d-none">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-lock text-warning me-2"></i> Keamanan Akun
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i> <strong>Catatan:</strong> Kosongkan field password jika tidak ingin mengubah password Anda.
                 </div>
 
-                <div id="action-buttons" class="hidden mt-10 pt-6 border-t border-gray-100 flex justify-end gap-3">
-                    <button type="button" onclick="toggleEditMode()" class="px-6 py-2.5 rounded-xl text-sm font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-bold bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-xl transition flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Simpan Perubahan
-                    </button>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Password Baru</label>
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" placeholder="Masukkan password baru" autocomplete="new-password" class="form-control border-end-0">
+                            <button type="button" onclick="togglePassword('password', 'eye-pass')" class="btn btn-outline-secondary border-start-0">
+                                <i id="eye-pass-show" class="fas fa-eye"></i>
+                                <i id="eye-pass-hide" class="fas fa-eye-slash d-none"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Minimal 6 karakter</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-uppercase small text-muted fw-semibold mb-2">Konfirmasi Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password_confirmation" id="password_confirm" placeholder="Ulangi password baru" autocomplete="new-password" class="form-control border-end-0">
+                            <button type="button" onclick="togglePassword('password_confirm', 'eye-conf')" class="btn btn-outline-secondary border-start-0">
+                                <i id="eye-conf-show" class="fas fa-eye"></i>
+                                <i id="eye-conf-hide" class="fas fa-eye-slash d-none"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
 
+        <!-- Action Buttons -->
+        <div id="action-buttons" class="d-none">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted">
+                            <i class="fas fa-info-circle me-2"></i> Pastikan data yang Anda masukkan sudah benar
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" onclick="toggleEditMode()" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i> Batal
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check me-2"></i> Simpan Perubahan
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
@@ -194,37 +205,20 @@
         const btnEdit = document.getElementById('edit-trigger');
         const actionButtons = document.getElementById('action-buttons');
 
-        // Toggle Hidden Class
-        viewElements.forEach(el => el.classList.toggle('hidden'));
-        editElements.forEach(el => el.classList.toggle('hidden'));
-        
-        // Toggle Buttons visibility
-        if (btnEdit.classList.contains('hidden')) {
-            // Masuk Mode View
-            btnEdit.classList.remove('hidden');
-            actionButtons.classList.add('hidden');
-        } else {
-            // Masuk Mode Edit
-            btnEdit.classList.add('hidden');
-            actionButtons.classList.remove('hidden');
-        }
+        viewElements.forEach(el => el.classList.toggle('d-none'));
+        editElements.forEach(el => el.classList.toggle('d-none'));
+        actionButtons.classList.toggle('d-none');
+        btnEdit.classList.toggle('d-none');
     }
 
-    // Fungsi Toggle Password Visibility
-    function togglePassword(inputId, iconIdPrefix) {
+    function togglePassword(inputId, eyePrefix) {
         const input = document.getElementById(inputId);
-        const iconShow = document.getElementById(iconIdPrefix + '-show');
-        const iconHide = document.getElementById(iconIdPrefix + '-hide');
-
-        if (input.type === "password") {
-            input.type = "text";
-            iconShow.classList.add('hidden');
-            iconHide.classList.remove('hidden');
-        } else {
-            input.type = "password";
-            iconShow.classList.remove('hidden');
-            iconHide.classList.add('hidden');
-        }
+        const hideIcon = document.getElementById(`${eyePrefix}-hide`);
+        const showIcon = document.getElementById(`${eyePrefix}-show`);
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        hideIcon.classList.toggle('d-none', !isPassword);
+        showIcon.classList.toggle('d-none', isPassword);
     }
 </script>
 @endsection
